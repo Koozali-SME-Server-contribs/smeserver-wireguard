@@ -1,0 +1,221 @@
+#! /usr/bin/perl -wT
+# vim: ft=xml:
+
+#----------------------------------------------------------------------
+# heading       : Configuration
+# description   : Wireguard
+# navigation    : 6000 6750
+#----------------------------------------------------------------------
+
+#----------------------------------------------------------------------
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+# 
+#----------------------------------------------------------------------
+
+
+use strict;
+use warnings;
+use esmith::FormMagick;
+use esmith::FormMagick::Panel::wireguard;
+
+my $f = esmith::FormMagick::Panel::wireguard->new();
+$f->display();
+
+__DATA__
+<form   title="FORM_TITLE" 
+    header="/etc/e-smith/web/common/head.tmpl" 
+    footer="/etc/e-smith/web/common/foot.tmpl">
+
+    #----------------------------------------------------------------
+    # MAIN PAGE
+    #----------------------------------------------------------------
+    <page name="FIRST_PAGE" pre-event="print_status_message()">
+        <field type="literal" id="main_desc" value=""> 
+            <description>DESC_MAIN_PAGE</description>
+        </field>
+
+        <field type="literal" id="config_label" value="">
+            <description>LABEL_CONFIG</description>
+        </field>
+
+        <subroutine src="print_custom_button('EDIT_CONFIG', 'EDIT_CONF_PAGE')"/>
+
+        <subroutine src="print_config()"/>
+
+
+        <subroutine src="print_section_bar()"/>
+
+        <field type="literal" id="client_label" value="">
+            <description>LABEL_CLIENTS</description>
+        </field>
+
+        <subroutine src="print_custom_button('ADD_CLIENT', 'ADD_CLIENT_PAGE')"/>
+
+        <subroutine src="print_conf_table('wg0')"/>
+
+        <subroutine src="print_section_bar()"/>
+
+    </page>
+    #----------------------------------------------------------------
+    # ADD CLIENT
+    #----------------------------------------------------------------
+    <page name="ADD_CLIENT_PAGE" 
+	pre-event="print_status_message()"
+        post-event="performCreateClient()">
+
+        <field type="literal" id="main_desc" value=""> 
+            <description>DESC_ADD_CLIENT_PAGE</description>
+        </field>
+
+        <field id="account" type="select" options="existing_accounts()">
+            <label>SELECT_ACCOUNT</label>
+            <description>DESC_SELECT_ACCOUNT</description>
+        </field>
+
+        <field id="info" type="text" value="get_cgi_param('info')">
+            <label>INFO_ACC_WIREGUARD</label>
+            <description>DESC_INFO_ACC_WIREGUARD</description>
+        </field>
+
+        <subroutine src="print_button('ADD')"/>
+
+
+    </page>
+    #----------------------------------------------------------------
+    # DISPLAY QR CODE
+    #----------------------------------------------------------------
+    <page name="DISPLAY_QR_PAGE" 
+        pre-event="print_status_message()"
+        >
+
+        <field type="literal" id="main_desc" value=""> 
+            <description>DESC_DISPLAY_QR_PAGE</description>
+        </field>
+	<subroutine src="print_qr()"/>
+    </page>
+
+
+    #----------------------------------------------------------------
+    # MODIFY CLIENT
+    #----------------------------------------------------------------
+    <page name="MODIFY_CLIENT_PAGE" 
+        pre-event="print_status_message()"
+        post-event="performModifyClient()">
+
+        <field type="literal" id="main_desc" value=""> 
+            <description>DESC_MODIFY_CLIENT_PAGE</description>
+        </field>
+
+        <subroutine src="print_section_bar()"/>
+
+        <subroutine src="print_client_name_field()"/>
+
+        <field id="account" type="select" options="existing_accounts()">
+            <label>SELECT_ACCOUNT</label>
+            <description>DESC_SELECT_ACCOUNT</description>
+        </field>
+
+        <field id="info" type="text" value="get_cgi_param('info')" size="45">
+            <label>INFO_ACC_WIREGUARD</label>
+            <description>DESC_INFO_ACC_WIREGUARD</description>
+        </field>
+
+        <field type="text" id="private" size="45">
+            <description>DESC_PRIVATE</description>
+            <label>LABEL_PRIVATE</label>
+        </field>
+
+        <field type="text" id="public" size="45">
+            <description>DESC_PUBLIC</description>
+            <label>LABEL_PUBLIC</label>
+        </field>
+
+        <field type="select" id="status" options="'disabled' => 'DISABLED', 'enabled' => 'ENABLED'">
+            <description>DESC_STATUS</description>
+            <label>LABEL_STATUS</label>
+        </field>
+
+        <field type="text" id="allowedips" size="45">
+            <description>DESC_ALLOWEDIPS</description>
+            <label>LABEL_ALLOWEDIPS</label>
+        </field>
+
+
+	#TODO : redirect all, redirect lAN, redirect vpn host, redirect vpn all,
+	#TODO : DNS
+
+        <subroutine src="print_button('MODIFY')"/>
+
+
+    </page>
+
+
+    #----------------------------------------------------------------
+    # EDIT CONFIG
+    #----------------------------------------------------------------
+    <page name="EDIT_CONF_PAGE" 
+        pre-event="print_status_message()"
+        post-event="performUpdateConfig()">
+
+        <field type="literal" id="main_desc" value=""> 
+            <description>DESC_MOD_CONFIG_PAGE</description>
+        </field>
+
+        <subroutine src="getConfig()"/>
+
+        <field id="ip" type="text" value="get_cgi_param('ip')">
+            <label>INFO_IP_WIREGUARD</label>
+            <description>DESC_IP_ACC_WIREGUARD</description>
+        </field>
+
+        <field id="mask" type="text" value="get_cgi_param('mask')">
+            <label>INFO_MASK_WIREGUARD</label>
+            <description>DESC_MASK_WIREGUARD</description>
+        </field>
+
+        <field type="text" id="private" size="45">
+            <description>DESC_PRIVATE_CONFIG</description>
+            <label>LABEL_PRIVATE</label>
+        </field>
+
+        <field type="text" id="public" size="45">
+            <description>DESC_PUBLIC_CONFIG</description>
+            <label>LABEL_PUBLIC</label>
+        </field>
+
+        <field type="select" id="status" options="'disabled' => 'DISABLED', 'enabled' => 'ENABLED'">
+            <description>DESC_STATUS</description>
+            <label>LABEL_STATUS</label>
+        </field>
+
+
+        <subroutine src="print_button('MODIFY')"/>
+
+
+    </page>
+
+    <page name="REMOVE_CLIENT_PAGE" pre-event="turn_off_buttons()" post-event="remove_client()">
+        <field type="literal" id="des_remove_conf">
+            <description>DESC_REMOVE_CLIENT</description>
+        </field>
+
+        <subroutine src="print_client_to_remove()"/>
+    </page>
+
+
+
+</form>
+

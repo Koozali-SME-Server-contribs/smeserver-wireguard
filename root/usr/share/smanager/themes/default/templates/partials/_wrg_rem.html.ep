@@ -1,0 +1,30 @@
+<div id='wrg_rem'>
+
+    %= form_for '/wireguard2' => (method => 'POST') => begin
+	<p>
+	%=l 'wrg_DESC_REMOVE_CLIENT'
+	</p>
+
+	<p><br><span class=label>
+	%=l 'wrg_CONF_NAME'
+	</span>
+	%= $wrg_datas->{wgconf}
+	<br></p>
+
+	<p><span class=label>
+	%=l 'COMMENT'
+	</span>
+	%= $wrg_datas->{wgcomment}
+	<br></p>
+
+	<div class='center'>
+	%= submit_button l('CANCEL'), name => 'cancel', class => 'action'
+	%= submit_button l('REMOVE'), name => 'remove', class => 'action'
+	</div>
+
+	%= hidden_field 'trt' => $wrg_datas->{trt}
+    	%= hidden_field 'Wgconf' => $wrg_datas->{wgconf}
+	
+    % end
+
+</div>

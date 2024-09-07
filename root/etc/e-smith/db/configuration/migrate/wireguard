@@ -1,0 +1,27 @@
+{
+my $wireguard = $DB->get('wg-quick@wg0') ||  $DB->new_record('wg-quick@wg0', {type => 'service'});
+
+# add private and public key if not present
+unless (defined ${'wg-quick@wg0'}{'private'}) {
+  $value= `/usr/bin/wg genkey`;
+  chomp $value;
+  $DB->set_prop('wg-quick@wg0', 'private', $value ) ;
+}
+# recreate public if empty or not the same
+$private=$DB->get_prop('wg-quick@wg0', 'private') ;
+$public=`/usr/bin/echo $private | /usr/bin/wg pubkey`;
+chomp $public;
+if ( ! defined ${'wg-quick@wg0'}{'public'} ||  ${'wg-quick@wg0'}{'public'} ne $public) {
+  $DB->set_prop('wg-quick@wg0', 'public', $public) ;
+}
+
+# default ip 
+if ( ! defined ${'wg-quick@wg0'}{'ip'} ) {
+my $minimum=16; 
+my $maximum=32; 
+my $x = $minimum + int(rand($maximum - $minimum)); 
+$DB->set_prop('wg-quick@wg0', 'ip', "172.$x.0.1") ;
+}
+
+}
+

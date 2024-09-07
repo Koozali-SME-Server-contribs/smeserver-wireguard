@@ -1,0 +1,35 @@
+% layout 'default', title => "Sme server 2 - wireguard";
+
+% content_for 'module' => begin
+<div id='module' class='module wireguard-panel'>
+
+    % if ($config->{debug} == 1) {
+	<p>
+	%= dumper $c->current_route
+	%= dumper $wrg_datas
+	</p>
+    % }
+    % if ( stash 'error' ) {
+    	<br><div class=sme-error>
+    	%= $c->render_to_string(inline => stash 'error') 
+	</div>
+    %}
+
+    <h1><%= $title%></h1>
+
+    % if ($wrg_datas->{trt} eq 'UPD') {
+	%= include 'partials/_wrg_upd'
+    %} elsif ($wrg_datas->{trt} eq 'NEW') {
+	%= include 'partials/_wrg_new'
+    %} elsif ($wrg_datas->{trt} eq 'QRC') {
+	%= include 'partials/_wrg_qrc'
+    %} elsif ($wrg_datas->{trt} eq 'MOD') {
+	%= include 'partials/_wrg_mod'
+    %} elsif ($wrg_datas->{trt} eq 'REM') {
+	%= include 'partials/_wrg_rem'
+    %} else {
+	%= include 'partials/_wrg_list'
+    %}
+
+</div>
+%end

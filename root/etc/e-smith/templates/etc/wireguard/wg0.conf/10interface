@@ -1,0 +1,10 @@
+[Interface]
+Address = { ${'wg-quick@wg0'}{ip} . '/' . ${'wg-quick@wg0'}{mask}}
+ListenPort = {${'wg-quick@wg0'}{UDPPort} || '51820' }
+PrivateKey = {${'wg-quick@wg0'}{private}}
+
+# this is not needed as we define vpn network as lan in network db 
+# furthermore masquerading postrouting will also mess up with any openvpn-s2s vpn
+#PostUp = iptables -I FORWARD -i %i -j ACCEPT; iptables -I FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o {$outernet = ($SystemMode eq "serveronly") ? $InternalInterface{Name} : $ExternalInterface{Name}; return $InternalInterface{Name} } -j MASQUERADE
+#PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o {$outernet = ($SystemMode eq "serveronly") ? $InternalInterface{Name} : $ExternalInterface{Name}; return $InternalInterface{Name} } -j MASQUERADE
+

@@ -1,0 +1,36 @@
+{
+use esmith::AccountsDB;
+
+my $wg =  esmith::ConfigDB->open_ro('/home/e-smith/db/wireguard');
+my $accounts = esmith::AccountsDB->open_ro;
+
+# for each user
+my @users = ( $accounts->users );
+push(@users, $accounts->get('admin'));
+for my $user ( @users ) {
+  my $username = $user->key;
+  my $count = 0;
+  for my $cnx ( $wg->get_all_by_prop(user => $username) ) {
+     $count++;
+     my $public = $cnx->prop('public');
+     my $ip = $cnx->key; 
+     my $info = $cnx->prop('info');
+     my $status = $cnx->prop('status') || "enabled";
+     if ( $status eq "disabled" ) {
+	$OUT .= "\n# $username : $info DISABLED (PublicKey = $public ; AllowedIPs = $ip)\n";
+	next;
+     }
+
+     $OUT .= "
+[Peer]
+# $username : $info
+PublicKey = $public
+AllowedIPs = $ip\n";
+
+
+  } 
+  $OUT .= "# no entry for user $username\n" if $count <1;
+}
+
+
+}

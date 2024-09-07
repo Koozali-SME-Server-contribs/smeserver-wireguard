@@ -1,0 +1,84 @@
+#!/usr/bin/perl -w
+use esmith::Build::CreateLinks  qw(:all);
+
+
+my $event="smeserver-wireguard-update";
+event_templates($event, qw(
+  /etc/wireguard/wg0.conf
+  /etc/wireguard/server_public.key
+  /etc/rc.d/init.d/masq
+));
+# for smeserver-manager
+safe_symlink('restart', "root/etc/e-smith/events/$event/services2adjust/smanager");
+event_link('navigation2-conf', "$event", '80');
+event_link('routes2-conf', "$event", '80');
+event_link('locales2-conf', "$event", '80');
+
+# server_public.key will expand server_private.key to keep sync
+
+#TODO 
+# restart masq or reload ??
+# restart wg-quick@wg0
+
+event_services($event, qw(
+  masq restart
+  wg-quick@wg0 restart
+));
+event_link("wireguard-network", $event, "04");
+templates2events("/etc/systemd/system-preset/49-koozali.preset", $event);
+event_link("systemd-reload", $event, "89");
+event_link("systemd-default", $event, "88");
+
+
+#wireguard-conf-modify
+$event="wireguard-conf-modify";
+event_templates($event, qw(
+  /etc/wireguard/wg0.conf
+    /etc/wireguard/server_public.key
+      /etc/rc.d/init.d/masq
+      ));
+event_services($event, qw(
+  masq restart
+  wg-quick@wg0 restart
+  ));
+event_link("wireguard-network", $event, "04");
+
+#wireguard-user-modify
+$event="wireguard-user-modify";
+event_templates($event, qw(
+  /etc/wireguard/wg0.conf
+  /etc/wireguard/server_public.key
+));
+event_services($event, qw(
+  wg-quick@wg0 restart
+));
+
+#wireguard-user-create
+$event="wireguard-user-create";
+event_templates($event, qw(
+  /etc/wireguard/wg0.conf
+  /etc/wireguard/server_public.key
+));
+event_services($event, qw(
+  wg-quick@wg0 restart
+));
+event_link("wireguard-user-create", $event, "03");
+
+#wireguard-user-delete
+$event="wireguard-user-delete";
+event_templates($event, qw(
+  /etc/wireguard/wg0.conf
+  /etc/wireguard/server_public.key
+));
+event_services($event, qw(
+  wg-quick@wg0 restart
+));
+
+$event="remoteaccess-update";
+event_services($event, qw(
+  wg-quick@wg0 restart
+));
+
+
+panel_link("wireguard", "manager");
+

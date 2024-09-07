@@ -1,0 +1,8 @@
+{
+    use esmith::templates;
+    esmith::templates::processTemplate({
+            TEMPLATE_PATH => "/etc/wireguard/server_private.key"
+            });
+    ${'wg-quick@wg0'}{public};
+
+}

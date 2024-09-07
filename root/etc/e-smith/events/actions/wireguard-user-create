@@ -1,0 +1,104 @@
+#!/usr/bin/perl -w
+
+package esmith;
+
+use strict;
+use Errno;
+use esmith::ConfigDB;
+use esmith::AccountsDB;
+#use Net::IP;
+use NetAddr::IP;
+
+my $conf = esmith::ConfigDB->open_ro;
+my $accounts = esmith::AccountsDB->open;
+esmith::ConfigDB->create('/home/e-smith/db/wireguard') unless (-f '/home/e-smith/db/wireguard');
+my $wg = esmith::ConfigDB->open('/home/e-smith/db/wireguard')  or die 'wireguard db missing';
+my $wg0 = $conf->get('wg-quick@wg0');
+my $wgip = $wg0->prop('ip') or die 'wireguard IP not configured';
+my $wgmask = $wg0->prop('mask') or die 'wireguard network mask not configured';
+my $clientmask = 32;
+#wg-quick@wg0=service
+#    ip=172.16.0.1
+#    mask=22
+
+
+my $event = $ARGV [0];
+my $userName = $ARGV [1];
+my $info = $ARGV [2];
+
+#------------------------------------------------------------
+# Create a wireguard peer for the user
+#------------------------------------------------------------
+
+die "username argument missing" unless defined ($userName);
+
+# check username exists in accounts as user or die
+
+#TODO get network ip/bit if mask is not a bitmask
+
+#TODO array of already used IP
+my @rec = ( defined $wg ) ? $wg->keys() : undef;
+push @rec, $wgip;
+my @out= map { (my $foo = $_) =~s/\/32//; $foo;} @rec;
+@rec= @out;
+
+# get next available IP
+my $nextip=undef;
+#my $mid = new Net::IP($wgip, 4);
+#my $mask = Net::IP::ip_get_mask($wgmask, 4);
+#my $first = Net::IP::ip_bintoip($mid->binip() & $mask,4);
+#my $ip = new Net::IP("$first/$wgmask", 4) or die (Net::IP::Error());
+#do {
+#  print $ip->ip(), "\n";
+#  $nextip=$ip->ip();
+#  exit  unless (@rec ~~ $nextip);
+#} while (++$ip);
+sub make_ip_iterator {
+    my $ip = shift;
+
+    my $mask = NetAddr::IP->new($ip);
+
+    my $i = 0;
+    return sub {
+        return $mask->nth($i++);
+    }
+}
+my $iterator = make_ip_iterator("$wgip/$wgmask");
+while (my $ip = NetAddr::IP->new($iterator->())->addr() ) {
+    print "$ip \n"; 
+    next if ( $ip ~~ @rec );
+    $nextip=$ip;
+    last;
+}
+die "no IP available in defined range" unless defined($nextip);
+print "$nextip\n";
+
+# generate private
+my $private= `/usr/bin/wg genkey`;
+chomp $private;
+my $public=`/usr/bin/echo $private | /usr/bin/wg pubkey`;
+chomp $public;
+
+# wireguard
+# #private;public;ips;info#private;public;ips;info
+# #private and public is base64 : +/= could be in it
+# #ips can be v4 or v6 with subnet ./:,
+# #info could have letters, digit and space
+# # to separate multiple #
+my $allowedips ="";
+
+# create db entry
+#  db wireguard set IP/mask wg0 user $userName private $private  public $public allowedips $allowedips info $info status disabled
+#  do we want lan access ; do we want redirect gw/dns
+#print "db wireguard set $nextip/$clientmask wg0 user $userName private $private public $public allowedips $allowedips info $info status enabled\n";
+my %props = (
+	'type', "wg0", 
+	'user', $userName,
+	'private', $private,
+	'public', $public,
+	'allowedips', $allowedips,
+	'info', $info,
+	'status', 'enabled'
+);
+$wg->new_record( "$nextip/$clientmask", \%props );
+

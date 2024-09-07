@@ -1,0 +1,80 @@
+#!/usr/bin/perl -w
+
+package esmith;
+
+use strict;
+use Errno;
+use esmith::ConfigDB;
+use esmith::AccountsDB;
+use NetAddr::IP;
+use Net::Netmask;
+use NetAddr::IP;
+
+my $conf = esmith::ConfigDB->open;
+my $netdb = esmith::ConfigDB->open('networks');
+my $accounts = esmith::AccountsDB->open;
+esmith::ConfigDB->create('/home/e-smith/db/wireguard') unless (-f '/home/e-smith/db/wireguard');
+my $wg = esmith::ConfigDB->open('/home/e-smith/db/wireguard')  or die 'wireguard db missing';
+my $wg0 = $conf->get('wg-quick@wg0');
+my $wgip = $wg0->prop('ip') or die 'wireguard IP not configured';
+my $wgmask = $wg0->prop('mask') or die 'wireguard network mask not configured';
+#wg-quick@wg0=service
+#    ip=172.16.0.1
+#    mask=22
+my $block = Net::Netmask->new("$wgip/$wgmask", shortnet => 1);
+my $ip = $block->base;
+my $mask = $block->mask;
+
+#count clients
+my @client = $wg->get_all_by_prop(type=>"wg0");
+my $clients = scalar @client;
+
+#check is_rfc1918
+#if yes proceed
+my $skipme = 0;
+my $rfc=NetAddr::IP->new($wgip,$wgmask);
+unless ( $rfc->is_rfc1918()  ) {
+	if ($clients == 0 ) {
+		#if not and no clients make it compliant 172.16.0.1/22 as default
+		my $minimum=16;
+		my $maximum=32;
+		my $x = $minimum + int(rand($maximum - $minimum));
+		warn("$wgip/$wgmask is not considered as a LAN addressing, set default to 172.$x.0.1/22");
+		$wgip="172.$x.0.1";$wgmask="22";
+		$wg0->set_prop('ip',$wgip); $wg0->set_prop('mask',$wgmask);
+		$block = Net::Netmask->new("$wgip/$wgmask", shortnet => 1);
+		$ip = $block->base;
+		$mask = $block->mask;
+	}
+	else {
+		#if not and clients configured, disable service delete network
+		warn("$wgip/$wgmask is not considered as a LAN addressing, adding this network to SME trusted network could allow email relaying. Disabling service.");
+		warn("Please remove configured client and start your configuration from scratch");
+		$wg0->set_prop('status','disabled');
+		$skipme=1; $ip="nop";
+	}
+}
+
+#if yes proceed
+#if not and no clients make it compliant 172.16.0.1/22 as default
+#if not and clients configured, disable service delete network
+
+#First delete any already there.
+my @wg = $netdb->get_all_by_prop(Wireguard=>"wg0");
+foreach my $netwg (@wg) {
+	next if ($netwg->key eq $ip and $netwg->prop('Mask') eq $mask);
+	print "delete " . $netwg->key;
+	$netwg->delete();
+}
+# and then create one from the wireguard server ip
+my $iswg=$netdb->get($ip);
+unless ($iswg or $skipme == 1) {
+  $netdb->new_record("$ip",{	type => "network", 
+				Mask => "$mask",
+				Wireguard => "wg0",
+			});
+  system("/sbin/e-smith/signal-event network-create $ip");
+  print "creating $ip network with $mask for $wgip/$wgmask";
+  exit;
+}
+

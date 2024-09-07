@@ -1,0 +1,17 @@
+<div id='wrg_qrc'>
+
+    % my $fulltext = join("\n", @{$c->get_conf_info( $wrg_datas->{wgconf} )});
+    <br><br>
+    %= text_area Info => "$fulltext", cols => 70, rows => 10
+    <br>
+
+    % my $qr = $c->get_conf_qr("$fulltext");
+    %= image "data:image/png;base64,$qr"
+
+    <br>
+    %=l 'wrg_DESC_DISPLAY_QR_PAGE'
+    <br>
+    %= hidden_field 'trt' => $wrg_datas->{trt}
+    %= hidden_field 'Wgconf' => $wrg_datas->{wgconf}
+
+</div>

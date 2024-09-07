@@ -1,0 +1,72 @@
+<div id='wrg_upd'>
+
+    %= form_for '/wireguard2' => (method => 'POST') => begin
+	<p>
+	%=l 'wrg_DESC_MOD_CONFIG_PAGE'
+	</p>
+
+	<p>
+	%=l 'wrg_DESC_IP_ACC_WIREGUARD'
+	</p>
+
+	<p><span class=label>
+	%=l 'wrg_INFO_IP_WIREGUARD'
+	</span><span class=data>
+	% param 'Ip' => $wrg_datas->{ip} unless param 'Ip';
+	%=text_field 'Ip' => class => 'input'
+	<br></span></p>
+	
+	<p>
+	%=l 'wrg_DESC_MASK_WIREGUARD'
+	</p>
+
+	<p><span class=label>
+	%=l 'wrg_INFO_MASK_WIREGUARD'
+	</span><span class=data>
+	% param 'Mask' => $wrg_datas->{mask} unless param 'Mask';
+	%=text_field 'Mask' => class => 'input'
+	<br></span></p>
+	
+	<p>
+	%=l 'wrg_DESC_PRIVATE_CONFIG'
+	</p>
+
+	<p><span class=label>
+	%=l 'wrg_LABEL_PRIVATE'
+	</span><span class=data>
+	% param 'Private' => $wrg_datas->{private} unless param 'Private';
+	%=text_field 'Private' => size => '45', class => 'input'
+	<br></span></p>
+	
+	<p>
+	%=l 'wrg_DESC_PUBLIC_CONFIG'
+	</p>
+
+	<p><span class=label>
+	%=l 'wrg_LABEL_PUBLIC'
+	</span><span class=data>
+	% param 'Public' => $wrg_datas->{public} unless param 'Public';
+	%=text_field 'Public' => size => '45', class => 'input'
+	<br></span></p>
+	
+	<p>
+	%=l 'wrg_DESC_STATUS'
+	</p>
+
+	<p><span class=label>
+	%=l 'wrg_LABEL_STATUS'
+	</span><span class=data>
+	% param 'Status' => $wrg_datas->{status} unless param 'Status';
+	%= select_field 'Status' => [[ (l 'DISABLED') => 'disabled'], [ (l 'ENABLED') => 'enabled']], class => 'input'
+	<br></span></p>
+
+	<div class='center'>
+	%= submit_button l('MODIFY'), name => 'modify', class => 'action'
+	</div>
+
+	%= hidden_field 'trt' => $wrg_datas->{trt}
+    	%= hidden_field 'Wgconf' => $wrg_datas->{wgconf}
+	
+    % end
+
+</div>

@@ -1,0 +1,12 @@
+# wireguard specific configuration
+{
+$wg = $wireguard{status} || 'disabled';
+$wg0 = ${'wg-quick@wg0'}{status} || 'disabled';
+if ($wg0 eq 'enabled') {
+        $OUT .= "enable wg-quick\@wg0.service\n";
+} else {
+        $OUT .= "disable wg-quick\@wg0.service\n";
+}
+
+}
+

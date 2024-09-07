@@ -1,0 +1,38 @@
+<div id='wrg_new'>
+
+    %= form_for '/wireguard2' => (method => 'POST') => begin
+	<p>
+	%=l 'wrg_DESC_ADD_CLIENT_PAGE'
+	</p>
+
+	<p>
+	%=l 'wrg_DESC_SELECT_ACCOUNT'
+	</p>
+
+	<p><span class=label>
+	%=l 'wrg_SELECT_ACCOUNT'
+	</span><span class=data>
+	<!-- param 'Account' => $wrg_datas->{account} unless param 'Account'; -->
+	%= select_field 'Account' => $c->get_existing_accounts(), class => 'input'
+	<br></span></p>
+
+	<p>
+	%=l 'wrg_DESC_INFO_ACC_WIREGUARD'
+	</p>
+
+	<p><span class=label>
+	%=l 'wrg_INFO_ACC_WIREGUARD'
+	</span><span class=data>
+	<!-- param 'Info' => $wrg_datas->{info} unless param 'Info'; -->
+	%=text_field 'Info' => size => '60', class => 'input'
+	<br></span></p>
+
+	<div class='center'>
+	%= submit_button l('ADD'), class => 'action'
+	</div>
+
+	%= hidden_field 'trt' => $wrg_datas->{trt}
+	
+    % end
+
+</div>
