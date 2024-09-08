@@ -1,4 +1,4 @@
-%define release 21
+%define release 22
 %define version 1.0
 
 Name: smeserver-wireguard		
@@ -11,14 +11,14 @@ License: GPL
 URL: https://wiki.koozali.org/Wireguard		
 Source0: smeserver-wireguard-1.0.tar.xz	
 
-BuildRequires:	e-smith-devtools
+BuildRequires:	smeserver-devtools
 Requires: wireguard-tools
 Requires: kmod-wireguard
 Requires: smeserver-release >= 10
 Requires: qrencode
 Requires: perl-Net-Netmask
-Requires: e-smith-base >= 5.8.1-2
-Requires: e-smith-lib >= 2.6.0-15
+Requires: smeserver-base >= 5.8.1-2
+Requires: smeserver-lib >= 2.6.0-15
 
 AutoReqProv: no
 
@@ -60,6 +60,9 @@ fi
 
 
 %changelog
+* Sun Sep 08 2024 Brian Read <brianr@koozali.org> 1.0-22.sme
+- Map e-smith package names to smeserver 
+
 * Sat Sep 07 2024 cvs2git.sh aka Brian Read <brianr@koozali.org> 1.0-21.sme
 - Roll up patches and move to git repo [SME: 12338]
 
