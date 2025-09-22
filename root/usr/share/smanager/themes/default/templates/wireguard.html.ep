@@ -3,7 +3,7 @@
 % content_for 'module' => begin
 <div id='module' class='module wireguard-panel'>
 
-    % if ($config->{debug} == 1) {
+    % if (config->{debug} == 1) {
 	<p>
 	%= dumper $c->current_route
 	%= dumper $wrg_datas

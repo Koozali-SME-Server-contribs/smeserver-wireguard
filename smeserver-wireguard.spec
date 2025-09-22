@@ -1,5 +1,6 @@
-%define release 22
+%define release 23
 %define version 1.0
+%define debug_package %{nil}
 
 Name: smeserver-wireguard		
 Version: %{version}	
@@ -36,7 +37,7 @@ This package provides the Koozali SME SERVER configuration for controlling WireG
 %setup -q
 
 %build
-perl createlink
+perl createlinks
 
 
 %install
@@ -60,6 +61,10 @@ fi
 
 
 %changelog
+* Mon Sep 22 2025 Brian Read <brianr@koozali.org> 1.0-23.sme
+- add debuginfo define to suppress it [SME: 13168]
+- Fix config call in layout [SME: 13168]
+
 * Sun Sep 08 2024 Brian Read <brianr@koozali.org> 1.0-22.sme
 - Map e-smith package names to smeserver 
 
