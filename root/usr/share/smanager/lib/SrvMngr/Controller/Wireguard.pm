@@ -23,11 +23,10 @@ use SrvMngr qw( theme_list init_session is_normal_password );
 use esmith::ConfigDB;
 use Net::IP;
 
-our $adb = esmith::AccountsDB->open() || die "Couldn't open accounts DB\ndb";
-our $cdb = esmith::ConfigDB->open() || die "Couldn't open config DB\n";
-our $wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
-our $ndb = esmith::NetworksDB->open_ro || die "Error opening networks DB\n";
-
+my $adb;
+my $cdb;
+my $wdb;
+my $ndb;
 
 sub main {
 
@@ -35,6 +34,8 @@ sub main {
     $c->app->log->info($c->log_req);
 
     my %wrg_datas = ();
+	$wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+
     my $title = $c->l('wrg_FORM_TITLE');
 
     $wrg_datas{'trt'} = 'LST';
@@ -73,6 +74,11 @@ sub do_display {
     my %wrg_datas = ();
     my $title = $c->l('wrg_FORM_TITLE');
     my $modul = '';
+
+	$adb = esmith::AccountsDB->open() || die "Couldn't open accounts DB\ndb";
+	$cdb = esmith::ConfigDB->open() || die "Couldn't open config DB\n";
+	$wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+	#$ndb = esmith::NetworksDB->open_ro || die "Error opening networks DB\n";
 
     $wrg_datas{'trt'} = $trt;
 
@@ -139,6 +145,11 @@ sub do_action {
 
     my $result = '';
     my $res = '';
+
+	$adb = esmith::AccountsDB->open() || die "Couldn't open accounts DB\ndb";
+	$cdb = esmith::ConfigDB->open() || die "Couldn't open config DB\n";
+	$wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+	$ndb = esmith::NetworksDB->open_ro || die "Error opening networks DB\n";
 
     if ( $trt eq 'QRC' ) {
     #	NEVER

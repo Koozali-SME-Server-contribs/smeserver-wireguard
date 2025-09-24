@@ -1,4 +1,4 @@
-%define release 23
+%define release 24
 %define version 1.0
 %define debug_package %{nil}
 
@@ -61,6 +61,9 @@ fi
 
 
 %changelog
+* Wed Sep 24 2025 Brian Read <brianr@koozali.org> 1.0-24.sme
+- Sort out access to DB vis a vis caching [SME: 13168]
+
 * Mon Sep 22 2025 Brian Read <brianr@koozali.org> 1.0-23.sme
 - add debuginfo define to suppress it [SME: 13168]
 - Fix config call in layout [SME: 13168]
