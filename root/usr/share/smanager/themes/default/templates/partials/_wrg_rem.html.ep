@@ -8,7 +8,7 @@
 	<p><br><span class=label>
 	%=l 'wrg_CONF_NAME'
 	</span>
-	%= $wrg_datas->{wgconf}
+	%= $wrg_datas->{account}
 	<br></p>
 
 	<p><span class=label>
@@ -17,13 +17,13 @@
 	%= $wrg_datas->{wgcomment}
 	<br></p>
 
-	<div class='center'>
-	%= submit_button l('CANCEL'), name => 'cancel', class => 'action'
-	%= submit_button l('REMOVE'), name => 'remove', class => 'action'
-	</div>
+<div class="center">
+  %= submit_button l('REMOVE'), name => 'remove', class => 'action left-btn'
+  %= submit_button l('CANCEL'), name => 'cancel', class => 'action center-btn'
+</div>
 
 	%= hidden_field 'trt' => $wrg_datas->{trt}
-    	%= hidden_field 'Wgconf' => $wrg_datas->{wgconf}
+    	%= hidden_field 'Wgconf' => $wrg_datas->{account}
 	
     % end
 

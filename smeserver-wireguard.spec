@@ -1,4 +1,4 @@
-%define release 24
+%define release 25
 %define version 1.0
 %define debug_package %{nil}
 
@@ -61,6 +61,9 @@ fi
 
 
 %changelog
+* Thu Sep 25 2025 Brian Read <brianr@koozali.org> 1.0-25.sme
+- Sort outy Remove panel placement and operation of buttons [SME: 13168]
+
 * Wed Sep 24 2025 Brian Read <brianr@koozali.org> 1.0-24.sme
 - Sort out access to DB vis a vis caching [SME: 13168]
 
