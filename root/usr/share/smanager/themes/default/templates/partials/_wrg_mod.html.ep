@@ -1,94 +1,103 @@
+
+Mojolicious Template Code Formatter vmojofmt 0.1.9
+Input data:
+Upload a file:
+(none)
+Remove empty lines from output
+Formatted Output:
+Output Syntax:
+
 <div id='wrg_mod'>
 
-    %= form_for '/wireguard2' => (method => 'POST') => begin
-	<p>
-	%=l 'wrg_DESC_MODIFY_CLIENT_PAGE'
-	</p>
-	<hr class='sectionbar'/>
+  %= form_for '/wireguard2' => (method => 'POST') => begin
+    <p>
+      %= l 'wrg_DESC_MODIFY_CLIENT_PAGE'
+    </p>
+    <hr class='sectionbar'/>
 
-	<p>
-	%=l 'wrg_DESC_CONF_NAME'
-	</p>
+    <p>
+      %= l 'wrg_DESC_CONF_NAME'
+    </p>
 
-	<p><span class=label>
-	%=l 'wrg_CONF_NAME'
-	</span>
-	%= $wrg_datas->{wgconf}
-	<br></p>
+    <p><span class=label>
+        %= l 'wrg_CONF_NAME'
+      </span>
+      %= $wrg_datas->{wgconf}
+      <br></p>
 
-	<p>
-	%=l 'wrg_DESC_SELECT_ACCOUNT'
-	</p>
+    <p>
+      %= l 'wrg_DESC_SELECT_ACCOUNT'
+    </p>
 
-	<p><span class=label>
-	%=l 'wrg_SELECT_ACCOUNT'
-	</span><span class=data>
-	% param 'Account' => $wrg_datas->{account} unless param 'Account';
-	%= select_field 'Account' => $c->get_existing_accounts(), class => 'input'
-	<br></span></p>
+    <p><span class=label>
+        %= l 'wrg_SELECT_ACCOUNT'
+      </span><span class=data>
+        % param 'Account' => $wrg_datas->{account} unless param 'Account';
+        %= select_field 'Account' => $c->get_existing_accounts(), class => 'input'
+        <br></span></p>
 
-	<p>
-	%=l 'wrg_DESC_INFO_ACC_WIREGUARD'
-	</p>
+    <p>
+      %= l 'wrg_DESC_INFO_ACC_WIREGUARD'
+    </p>
 
-	<p><span class=label>
-	%=l 'wrg_INFO_ACC_WIREGUARD'
-	</span><span class=data>
-	% param 'Info' => $wrg_datas->{info} unless param 'Info';
-	%=text_field 'Info' => size => '45', class => 'input'
-	<br></span></p>
-	
-	<p>
-	%=l 'wrg_DESC_PRIVATE'
-	</p>
+    <p><span class=label>
+        %= l 'wrg_INFO_ACC_WIREGUARD'
+      </span><span class=data>
+        % param 'Info' => $wrg_datas->{info} unless param 'Info';
+        %= text_field 'Info' => size => '45', class => 'input'
+        <br></span></p>
 
-	<p><span class=label>
-	%=l 'wrg_LABEL_PRIVATE'
-	</span><span class=data>
-	% param 'Private' => $wrg_datas->{private} unless param 'Private';
-	%=text_field 'Private' => size => '45', class => 'input'
-	<br></span></p>
-	
-	<p>
-	%=l 'wrg_DESC_PUBLIC'
-	</p>
+    <p>
+      %= l 'wrg_DESC_PRIVATE'
+    </p>
 
-	<p><span class=label>
-	%=l 'wrg_LABEL_PUBLIC'
-	</span><span class=data>
-	% param 'Public' => $wrg_datas->{public} unless param 'Public';
-	%=text_field 'Public' => size => '45', class => 'input'
-	<br></span></p>
-	
-	<p>
-	%=l 'wrg_DESC_STATUS'
-	</p>
+    <p><span class=label>
+        %= l 'wrg_LABEL_PRIVATE'
+      </span><span class=data>
+        % param 'Private' => $wrg_datas->{private} unless param 'Private';
+        %= text_field 'Private' => size => '45', class => 'input'
+        <br></span></p>
 
-	<p><span class=label>
-	%=l 'wrg_LABEL_STATUS'
-	</span><span class=data>
-	% param 'Status' => $wrg_datas->{status} unless param 'Status';
-	%= select_field 'Status' => [[ (l 'DISABLED') => 'disabled'], [ (l 'ENABLED') => 'enabled']], class => 'input'
-	<br></span></p>
+    <p>
+      %= l 'wrg_DESC_PUBLIC'
+    </p>
 
-	<p>
-	%=l 'wrg_DESC_ALLOWEDIPS'
-	</p>
+    <p><span class=label>
+        %= l 'wrg_LABEL_PUBLIC'
+      </span><span class=data>
+        % param 'Public' => $wrg_datas->{public} unless param 'Public';
+        %= text_field 'Public' => size => '45', class => 'input'
+        <br></span></p>
 
-	<p><span class=label>
-	%=l 'wrg_LABEL_ALLOWEDIPS'
-	</span><span class=data>
-	% param 'Allowedips' => $wrg_datas->{allowedips} unless param 'Allowedips';
-	%=text_field 'Allowedips' => size => '45', class => 'input'
-	<br></span></p>
-	
-	<div class='center'>
-	%= submit_button l('MODIFY'), name => 'modify', class => 'action'
-	</div>
+    <p>
+      %= l 'wrg_DESC_STATUS'
+    </p>
 
-	%= hidden_field 'trt' => $wrg_datas->{trt}
-    	%= hidden_field 'Wgconf' => $wrg_datas->{wgconf}
-	
-    % end
+    <p><span class=label>
+        %= l 'wrg_LABEL_STATUS'
+      </span><span class=data>
+        % param 'Status' => $wrg_datas->{status} unless param 'Status';
+        %= select_field 'Status' => [[ (l 'DISABLED') => 'disabled'], [ (l 'ENABLED') => 'enabled']], class => 'input'
+        <br></span></p>
+
+    <p>
+      %= l 'wrg_DESC_ALLOWEDIPS'
+    </p>
+
+    <p><span class=label>
+        %= l 'wrg_LABEL_ALLOWEDIPS'
+      </span><span class=data>
+        % param 'Allowedips' => $wrg_datas->{allowedips} unless param 'Allowedips';
+        %= text_field 'Allowedips' => size => '45', class => 'input'
+        <br></span></p>
+
+    <div class='center'>
+      %= submit_button l('MODIFY'), name => 'modify', class => 'action'
+    </div>
+
+    %= hidden_field 'trt' => $wrg_datas->{trt}
+    %= hidden_field 'Wgconf' => $wrg_datas->{wgconf}
+
+  % end
 
 </div>

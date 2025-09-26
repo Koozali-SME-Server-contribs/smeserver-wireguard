@@ -1,30 +1,38 @@
 <div id='wrg_rem'>
 
-    %= form_for '/wireguard2' => (method => 'POST') => begin
-	<p>
-	%=l 'wrg_DESC_REMOVE_CLIENT'
-	</p>
+  %= form_for '/wireguard2' => (method => 'POST') => begin
+    <p>
+      %= l 'wrg_DESC_REMOVE_CLIENT'
+    </p>
 
-	<p><br><span class=label>
-	%=l 'wrg_CONF_NAME'
-	</span>
-	%= $wrg_datas->{account}
-	<br></p>
+    <p><span class=label>
+        %= l 'wrg_USER'
+      </span><span class=data>
+        %= $wrg_datas->{account}
+      </p>
 
-	<p><span class=label>
-	%=l 'COMMENT'
-	</span>
-	%= $wrg_datas->{wgcomment}
-	<br></p>
+      <p><span class=label>
+          %= l 'wrg_CONF_NAME'
+        </span><span class=data>
+          %= $wrg_datas->{wgconf}
+        </span>
+      </p>
 
-<div class="center">
-  %= submit_button l('REMOVE'), name => 'remove', class => 'action left-btn'
-  %= submit_button l('CANCEL'), name => 'cancel', class => 'action center-btn'
-</div>
+      <p><span class=label>
+          %= l 'COMMENT'
+        </span><span class=data>
+          %= $wrg_datas->{wgcomment}
+        </span>
+      </p>
 
-	%= hidden_field 'trt' => $wrg_datas->{trt}
-    	%= hidden_field 'Wgconf' => $wrg_datas->{account}
-	
+      <div class="center">
+        %= submit_button l('REMOVE'), name => 'remove', class => 'action left-btn'
+        %= submit_button l('CANCEL'), name => 'cancel', class => 'action center-btn'
+      </div>
+
+      %= hidden_field 'trt' => $wrg_datas->{trt}
+      %= hidden_field 'Wgconf' => $wrg_datas->{wgconf}
+
     % end
 
-</div>
+  </div>

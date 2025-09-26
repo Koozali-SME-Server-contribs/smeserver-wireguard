@@ -1,73 +1,74 @@
 <div id='wrg_list'>
 
-    <p><%=l 'wrg_DESC_MAIN_PAGE'%><br></p>
+  <p><%= l 'wrg_DESC_MAIN_PAGE' %><br></p>
 
-	%= form_for 'wireguard' => (method => 'POST') => begin
-    	    %=  hidden_field 'trt' => 'UPD'
-	    <p><%=l 'wrg_LABEL_CONFIG'%><br><br></p>
-	    %= submit_button l('wrg_EDIT_CONFIG'), class => 'action'
-	% end
+  %= form_for 'wireguard' => (method => 'POST') => begin
+    %= hidden_field 'trt' => 'UPD'
+    <p><%= l 'wrg_LABEL_CONFIG' %><br><br></p>
+    %= submit_button l('wrg_EDIT_CONFIG'), class => 'action'
+  % end
 
-	<p><span class=label>
-	%=l 'wrg_INTERFACE'
-	</span> wg0<br></p>
+  <p><span class=label>
+      %= l 'wrg_INTERFACE'
+    </span> wg0<br></p>
 
-	<p><span class=label>
-	%=l 'wrg_LABEL_STATUS'
-	</span>
-	%= $wrg_datas->{sstatus}
-	<br></p>
+  <p><span class=label>
+      %= l 'wrg_LABEL_STATUS'
+    </span>
+    %= $wrg_datas->{sstatus}
+    <br></p>
 
-	<p><span class=label>
-	%=l 'wrg_PUBLIC_KEY'
-	</span>
-	%= $wrg_datas->{wgpub}
-	<br></p>
+  <p><span class=label>
+      %= l 'wrg_PUBLIC_KEY'
+    </span>
+    %= $wrg_datas->{wgpub}
+    <br></p>
 
-	<p><span class=label>
-	%=l 'wrg_IP'
-	</span>
-	%= $wrg_datas->{wgip}.'/'.$wrg_datas->{wgmask}
-	<br></p>
+  <p><span class=label>
+      %= l 'wrg_IP'
+    </span>
+    %= $wrg_datas->{wgip}.'/'.$wrg_datas->{wgmask}
+    <br></p>
 
-	<p><span class=label>
-	%=l 'wrg_PORT'
-	</span>
-	%= $wrg_datas->{wgport}
-	<br></p>
+  <p><span class=label>
+      %= l 'wrg_PORT'
+    </span>
+    %= $wrg_datas->{wgport}
+    <br></p>
+  <br />
 
-	<table class="sme-border"><tbody>
-	<tr>
-    	    <th class='sme-border'>
-    	    %=l 'wrg_PUBLIC_KEY'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_INFO'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_ENDPOINT'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_VPN_IP'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_LATEST_HANDSHAKE'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_RECEIVED'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_SENT'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_KEEPALIVE'
-    	    </th>
-    	</tr>
+  <table class="sme-border"><tbody>
+      <tr>
+        <th class='sme-border'>
+          %= l 'wrg_PUBLIC_KEY'
+        </th><th class='sme-border'>
+          %= l 'wrg_INFO'
+        </th><th class='sme-border'>
+          %= l 'wrg_ENDPOINT'
+        </th><th class='sme-border'>
+          %= l 'wrg_VPN_IP'
+        </th><th class='sme-border'>
+          %= l 'wrg_LATEST_HANDSHAKE'
+        </th><th class='sme-border'>
+          %= l 'wrg_RECEIVED'
+        </th><th class='sme-border'>
+          %= l 'wrg_SENT'
+        </th><th class='sme-border'>
+          %= l 'wrg_KEEPALIVE'
+        </th>
+      </tr>
 
-    % if (scalar @$wgstatus > 0) {
-    %    foreach my $list (@$wgstatus) {
-    %		#public-key | private-key | listen-port |persistent-keepalive
-    %		my @line = split(' ',$list);
-    %		next if $line[1] eq $wrg_datas->{wgpub};
-    %		my ($ginfo, $user);
-    %    	$ginfo = $c->get_wgs_info('info', "$line[3]");
-    %    	$user  = $c->get_wgs_info('user', "$line[3]");
-    %    	use POSIX qw( strftime );
-    %    	my $dateR= ($line[4] ) ? strftime("%Y-%m-%d %H:%M:%S", localtime($line[4])) : " ";
-        <tr>
+      % if (scalar @$wgstatus > 0) {
+        % foreach my $list (@$wgstatus) {
+          % #public-key | private-key | listen-port |persistent-keepalive
+          % my @line = split(' ',$list);
+          % next if $line[1] eq $wrg_datas->{wgpub};
+          % my ($ginfo, $user);
+          % $ginfo = $c->get_wgs_info('info', "$line[3]");
+          % $user = $c->get_wgs_info('user', "$line[3]");
+          % use POSIX qw( strftime );
+          % my $dateR= ($line[4] ) ? strftime("%Y-%m-%d %H:%M:%S", localtime($line[4])) : " ";
+          <tr>
             %= t td => (class => 'sme-border') => $line[0]
             %= t td => (class => 'sme-border') => "$user : $ginfo"
             %= t td => (class => 'sme-border') => $line[2]
@@ -76,55 +77,56 @@
             %= t td => (class => 'sme-border') => $line[5]
             %= t td => (class => 'sme-border') => $line[6]
             %= t td => (class => 'sme-border') => $line[7]
-    	</tr>
-    %    }
-    %	}
-    	</tbody></table>
+          </tr>
+        % }
+      % }
+  </tbody></table>
 
-    %= form_for 'wireguard' => (method => 'POST') => begin
-	<hr class='sectionbar'/>
-	<p><%=l 'wrg_LABEL_CLIENTS'%><br><br></p>
-        %= hidden_field 'trt' => 'NEW'
-	%= submit_button l('wrg_ADD_CLIENT'), class => 'action'
-    % end
-
-    %	if ( scalar @$wgconf == 0 ) {
-    	    %=l 'wrg_NO_CONF'
-    %	} else {
-	<table class="sme-border"><tbody>
-	<tr>
-    	    <th class='sme-border'>
-    	    %=l 'wrg_CONF_NAME'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_USER'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_INFO'
-    	    </th><th class='sme-border'>
-    	    %=l 'wrg_LABEL_STATUS'
-    	    </th><th class='sme-border' colspan='3'>
-    	    %=l 'ACTION'
-    	    </th>
-    	</tr>
-    %    foreach my $conf (@$wgconf) {
-    %    my $status = $c->l(uc($conf->prop('status') || 'enabled'));
-        <tr>
-            %= t td => (class => 'sme-border') => $conf->key
-            %= t td => (class => 'sme-border') => $conf->prop('user') || ''
-            %= t td => (class => 'sme-border') => $conf->prop('info') || ''
-            %= t td => (class => 'sme-border') => $status
-    %	    my $action = 
-    % 		"<a href='wireguard2?CsrfDef=TOKEN&trt=QRC&Wgconf=" . $conf->key . "'>" . l('wrg_QRCODE') . "</a>"; 
-    	    <td class='sme-border'><%= $c->render_to_string(inline => $action) %></td>
-    %	    $action = 
-    % 		"<a href='wireguard2?CsrfDef=TOKEN&trt=MOD&Wgconf=" . $conf->key . "'>" . l('MODIFY') . "</a>"; 
-    	    <td class='sme-border'><%= $c->render_to_string(inline => $action) %></td>
-    %	    $action = 
-    % 		"<a href='wireguard2?CsrfDef=TOKEN&trt=REM&Wgconf=" . $conf->key . "'>" . l('REMOVE') . "</a>"; 
-    	    <td class='sme-border'><%= $c->render_to_string(inline => $action) %></td>
-    	</tr>
-    %    }
-    	</tbody>
-    	</table>
-    %}
+  %= form_for 'wireguard' => (method => 'POST') => begin
     <hr class='sectionbar'/>
+    <p><%= l 'wrg_LABEL_CLIENTS' %><br><br></p>
+    %= hidden_field 'trt' => 'NEW'
+    %= submit_button l('wrg_ADD_CLIENT'), class => 'action'
+  % end
+
+  % if ( scalar @$wgconf == 0 ) {
+    %= l 'wrg_NO_CONF'
+  % } else {
+  <br />
+  <table class="sme-border"><tbody>
+      <tr>
+        <th class='sme-border'>
+          %= l 'wrg_CONF_NAME'
+        </th><th class='sme-border'>
+          %= l 'wrg_USER'
+        </th><th class='sme-border'>
+          %= l 'wrg_INFO'
+        </th><th class='sme-border'>
+          %= l 'wrg_LABEL_STATUS'
+        </th><th class='sme-border' colspan='3'>
+          %= l 'ACTION'
+        </th>
+      </tr>
+      % foreach my $conf (@$wgconf) {
+        % my $status = $c->l(uc($conf->prop('status') || 'enabled'));
+        <tr>
+          %= t td => (class => 'sme-border') => $conf->key
+          %= t td => (class => 'sme-border') => $conf->prop('user') || ''
+          %= t td => (class => 'sme-border') => $conf->prop('info') || ''
+          %= t td => (class => 'sme-border') => $status
+          % my $action =
+          % "<a href='wireguard2?CsrfDef=TOKEN&trt=QRC&Wgconf=" . $conf->key . "'>" . l('wrg_QRCODE') . "</a>";
+          <td class='sme-border'><%= $c->render_to_string(inline => $action) %></td>
+          % $action =
+          % "<a href='wireguard2?CsrfDef=TOKEN&trt=MOD&Wgconf=" . $conf->key . "'>" . l('MODIFY') . "</a>";
+          <td class='sme-border'><%= $c->render_to_string(inline => $action) %></td>
+          % $action =
+          % "<a href='wireguard2?CsrfDef=TOKEN&trt=REM&Wgconf=" . $conf->key . "'>" . l('REMOVE') . "</a>";
+          <td class='sme-border'><%= $c->render_to_string(inline => $action) %></td>
+        </tr>
+      % }
+    </tbody>
+  </table>
+  % }
+  <hr class='sectionbar'/>
 </div>

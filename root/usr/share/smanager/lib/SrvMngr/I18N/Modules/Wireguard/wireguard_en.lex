@@ -46,7 +46,7 @@
 'wrg_ERROR_WRONG_ACCT_TYPE' => 'The associated account shoult be a user or admin account.',
 'wrg_ERROR_OCCURED' => 'An error occured',
 'wrg_CLIENTS_ALREADY_CONFIGURED' => 'You can not alter the server ip, mask, private and public key as there are already some clients configured.',
-'wrg_NO_CONF' => 'No configured client',
+'wrg_NO_CONF' => 'No configured clients',
 'wrg_INTERFACE' => 'Interface',
 'wrg_CANCELLED' => 'Operation cancelled',
 'wrg_SUCCESSFULLY_MODIFIED_CONF' => 'Client configuration successfully modified',

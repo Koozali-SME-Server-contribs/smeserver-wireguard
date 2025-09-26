@@ -1,4 +1,4 @@
-%define release 25
+%define release 26
 %define version 1.0
 %define debug_package %{nil}
 
@@ -61,6 +61,9 @@ fi
 
 
 %changelog
+* Fri Sep 26 2025 Brian Read <brianr@koozali.org> 1.0-26.sme
+- Fix remove logic, add in user name to rem panel re-format templates,  add space to list panel [SME: 13168]
+
 * Thu Sep 25 2025 Brian Read <brianr@koozali.org> 1.0-25.sme
 - Sort outy Remove panel placement and operation of buttons [SME: 13168]
 
