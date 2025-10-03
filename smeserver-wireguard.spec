@@ -1,4 +1,4 @@
-%define release 26
+%define release 27
 %define version 1.0
 %define debug_package %{nil}
 
@@ -54,13 +54,12 @@ cat %{name}-%{version}-filelist
 #%doc COPYING
 
 %post
-if (systemctl list-unit-files |grep smanager) then
-  echo "Smanager restart in spec file"
-  /sbin/e-smith/signal-event smanager-refresh;
-fi
 
 
 %changelog
+* Fri Oct 03 2025 Brian Read <brianr@koozali.org> 1.0-27.sme
+- Remove smanager-refresh from spec file [SME: 13212]
+
 * Fri Sep 26 2025 Brian Read <brianr@koozali.org> 1.0-26.sme
 - Fix remove logic, add in user name to rem panel re-format templates,  add space to list panel [SME: 13168]
 
