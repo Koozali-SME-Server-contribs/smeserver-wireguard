@@ -1,4 +1,4 @@
-%define release 27
+%define release 28
 %define version 1.0
 %define debug_package %{nil}
 
@@ -57,6 +57,9 @@ cat %{name}-%{version}-filelist
 
 
 %changelog
+* Fri Oct 03 2025 Brian Read <brianr@koozali.org> 1.0-28.sme
+- Add in UTF8 to ConfigDB open [SME: 13209]
+
 * Fri Oct 03 2025 Brian Read <brianr@koozali.org> 1.0-27.sme
 - Remove smanager-refresh from spec file [SME: 13212]
 

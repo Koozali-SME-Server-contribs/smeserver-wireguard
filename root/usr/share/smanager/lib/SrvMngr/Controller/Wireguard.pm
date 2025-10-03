@@ -18,7 +18,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Locale::gettext;
 use SrvMngr::I18N;
 use SrvMngr qw( theme_list init_session is_normal_password );
-use esmith::ConfigDB;
+use esmith::ConfigDB::UTF8;
 use Net::IP;
 my $adb;
 my $cdb;
@@ -29,10 +29,10 @@ sub main {
     my $c = shift;
     $c->app->log->info($c->log_req);
     my %wrg_datas = ();
-    $wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+    $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB::UTF8->create('wireguard');
     my $title = $c->l('wrg_FORM_TITLE');
     $wrg_datas{'trt'} = 'LST';
-    $cdb = esmith::ConfigDB->open() || die "Couldn't open config DB\n";
+    $cdb = esmith::ConfigDB::UTF8->open() || die "Couldn't open config DB\n";
     my $wg = $cdb->get('wg-quick@wg0');
     $wrg_datas{'wgpub'}   = $wg->prop('public');
     $wrg_datas{'wgip'}    = $wg->prop('ip');
@@ -61,8 +61,8 @@ sub do_display {
     my $title     = $c->l('wrg_FORM_TITLE');
     my $modul     = '';
     $adb = esmith::AccountsDB->open()          || die "Couldn't open accounts DB\ndb";
-    $cdb = esmith::ConfigDB->open()            || die "Couldn't open config DB\n";
-    $wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+    $cdb = esmith::ConfigDB::UTF8->open()            || die "Couldn't open config DB\n";
+    $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB::UTF8->create('wireguard');
 
     #$ndb = esmith::NetworksDB->open_ro || die "Error opening networks DB\n";
     $wrg_datas{'trt'} = $trt;
@@ -125,8 +125,8 @@ sub do_action {
     my $result = '';
     my $res    = '';
     $adb = esmith::AccountsDB->open()          || die "Couldn't open accounts DB\ndb";
-    $cdb = esmith::ConfigDB->open()            || die "Couldn't open config DB\n";
-    $wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+    $cdb = esmith::ConfigDB::UTF8->open()            || die "Couldn't open config DB\n";
+    $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB::UTF8->create('wireguard');
     $ndb = esmith::NetworksDB->open_ro         || die "Error opening networks DB\n";
 
     if ($trt eq 'QRC') {
@@ -216,7 +216,7 @@ sub do_action {
     }
 
     #force reload as successfull (for Main)
-    $wdb = esmith::ConfigDB->open('wireguard');
+    $wdb = esmith::ConfigDB::UTF8->open('wireguard');
     my $message = "'Wireguard' update ($trt) DONE";
     $c->app->log->info($message);
     $c->flash(success => $result);
