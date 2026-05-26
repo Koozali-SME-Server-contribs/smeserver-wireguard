@@ -370,7 +370,7 @@ sub performRemoveClient {
 # called from templates
 sub get_existing_accounts {
     my $c                = shift;
-    my @existingAccounts = ('Administrator');
+    my @existingAccounts = ('admin');
 
     foreach my $account ($adb->get_all_by_prop(type => 'user')) {
         push @existingAccounts, $account->key;

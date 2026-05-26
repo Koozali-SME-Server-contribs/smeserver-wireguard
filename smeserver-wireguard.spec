@@ -1,4 +1,4 @@
-%define release 28
+%define release 29
 %define version 1.0
 %define debug_package %{nil}
 
@@ -57,6 +57,9 @@ cat %{name}-%{version}-filelist
 
 
 %changelog
+* Mon May 25 2026 Jean-Philippe Pialasse <jpp@koozali.org> 1.0-29.sme
+- fix admin usage [SME: 13168]
+
 * Fri Oct 03 2025 Brian Read <brianr@koozali.org> 1.0-28.sme
 - Add in UTF8 to ConfigDB open [SME: 13209]
 
