@@ -80,5 +80,4 @@ event_services($event, qw(
 ));
 
 
-panel_link("wireguard", "manager");
 

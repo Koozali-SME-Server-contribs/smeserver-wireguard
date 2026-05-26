@@ -1,4 +1,4 @@
-%define release 29
+%define release 30
 %define version 1.0
 %define debug_package %{nil}
 
@@ -57,6 +57,10 @@ cat %{name}-%{version}-filelist
 
 
 %changelog
+* Tue May 26 2026 Jean-Philippe Pialasse <jpp@koozali.org> 1.0-30.sme
+- import translations [SME: 13545]
+- remove SM1
+
 * Mon May 25 2026 Jean-Philippe Pialasse <jpp@koozali.org> 1.0-29.sme
 - fix admin usage [SME: 13168]
 
