@@ -1,12 +1,3 @@
-
-Mojolicious Template Code Formatter vmojofmt 0.1.9
-Input data:
-Upload a file:
-(none)
-Remove empty lines from output
-Formatted Output:
-Output Syntax:
-
 <div id='wrg_mod'>
 
   %= form_for '/wireguard2' => (method => 'POST') => begin

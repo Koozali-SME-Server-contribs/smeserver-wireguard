@@ -60,7 +60,7 @@ sub do_display {
     my %wrg_datas = ();
     my $title     = $c->l('wrg_FORM_TITLE');
     my $modul     = '';
-    $adb = esmith::AccountsDB->open()          || die "Couldn't open accounts DB\ndb";
+    $adb = esmith::AccountsDB::UTF8->open()          || die "Couldn't open accounts DB\ndb";
     $cdb = esmith::ConfigDB::UTF8->open()            || die "Couldn't open config DB\n";
     $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB::UTF8->create('wireguard');
 
@@ -124,7 +124,7 @@ sub do_action {
     $wrg_datas{'trt'} = $trt;
     my $result = '';
     my $res    = '';
-    $adb = esmith::AccountsDB->open()          || die "Couldn't open accounts DB\ndb";
+    $adb = esmith::AccountsDB::UTF8->open()          || die "Couldn't open accounts DB\ndb";
     $cdb = esmith::ConfigDB::UTF8->open()            || die "Couldn't open config DB\n";
     $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB::UTF8->create('wireguard');
     $ndb = esmith::NetworksDB->open_ro         || die "Error opening networks DB\n";

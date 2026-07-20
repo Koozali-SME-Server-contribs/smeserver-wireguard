@@ -1,4 +1,4 @@
-%define release 30
+%define release 31
 %define version 1.0
 %define debug_package %{nil}
 
@@ -57,6 +57,10 @@ cat %{name}-%{version}-filelist
 
 
 %changelog
+* Mon Jul 20 2026 Brian Read <brianr@koozali.org> 1.0-31.sme
+- Add UTF8 where needed in DB open calls [SME: 13666]
+- Remove extra text from mojo template formatter in MOD panel [SME: 13668]
+
 * Tue May 26 2026 Jean-Philippe Pialasse <jpp@koozali.org> 1.0-30.sme
 - import translations [SME: 13545]
 - remove SM1

@@ -30,8 +30,8 @@ our @EXPORT = qw(
     reload
 );
 
-our $accounts = esmith::AccountsDB->open();
-our $wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+our $accounts = esmith::AccountsDB::UTF8->open();
+our $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB->create('wireguard');
 our $cdb = esmith::ConfigDB->open || die "Error opening configuration DB\n";
 our $ndb = esmith::NetworksDB->open_ro || die "Error opening netwoks DB\n";
 our $base_url = "?page=0&page_stack=&Next=Next&wherenext=";
@@ -69,7 +69,7 @@ sub print_conf_table{
     my $q = $fm->{cgi};
     my $conf_name = $fm->localise('CONF_NAME');
     my $modify = $fm->localise('MODIFY');
-    $wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+    $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB->create('wireguard');
 
     my @conf = $wdb->get_all_by_prop(type=>$type);
 
@@ -204,7 +204,7 @@ sub performCreateClient{
         return $fm->error("ERROR_OCCURED", 'FIRST_PAGE');
     }
     #force reload
-    $wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+    $wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB->create('wireguard');
     # return
     $fm->success('SUCCESS','FIRST_PAGE');
     return undef;
@@ -498,7 +498,7 @@ sub remove_client{
             return undef;
         }
     	#force reload
-    	$wdb = esmith::ConfigDB->open('wireguard') || esmith::ConfigDB->create('wireguard');
+    	$wdb = esmith::ConfigDB::UTF8->open('wireguard') || esmith::ConfigDB->create('wireguard');
         $fm->success('SUCCESS','FIRST_PAGE');
         return undef;
     }
